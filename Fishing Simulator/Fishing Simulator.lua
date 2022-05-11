@@ -29,6 +29,19 @@ local spears = loadstring(game:HttpGet(('https://raw.githubusercontent.com/reddy
 
 local legendary = loadstring(game:HttpGet(('https://raw.githubusercontent.com/reddythedev/Reddy-Hub/main/Utils/Legendary')))()
 
+local Ships = {
+    "ShipModel1",
+    "ShipModel2",
+    "ShipModel3",
+    "ShipModel4",
+    "ShipModel5",
+    "ShipModel6",
+    "ShipModel7",
+    "ShipModel8",
+    "ShipModel9",
+    "ShipModel10",
+}
+
 local key = {
     "whalekey"
 }
@@ -57,8 +70,8 @@ b:Toggle("Auto Kill Sharks",function(bool)
     shared.toggle = bool
     if shared.toggle == true then
     fuckMonster = RunService.Stepped:Connect(function()
-     for i, v in pairs(game.Workspace:GetChildren()) do
-     if v:FindFirstChild("Health") and v:FindFirstChild("IsSeaMonster") and v.Name == "GreatWhiteShark" or v.Name == "BigGreatWhiteShark" or v.Name == "KillerWhale" or v.Name == "NeonGreatWhiteShark" or v.Name == "MobyWood" then
+    for i, v in pairs(game.Workspace:GetChildren()) do
+    if v:FindFirstChild("Health") and v:FindFirstChild("IsSeaMonster") and v.Name == "GreatWhiteShark" or v.Name == "BigGreatWhiteShark" or v.Name == "KillerWhale" or v.Name == "NeonGreatWhiteShark" or v.Name == "MobyWood" then
         teleport(v.HumanoidRootPart.CFrame - Vector3.new(30, 0, 30))
         local monsterName = v.Name
         wait(0.25)
@@ -70,13 +83,76 @@ b:Toggle("Auto Kill Sharks",function(bool)
                 end
             end
         end
-        end
+    end
      end
      end)
     else
          fuckMonster:Disconnect()
           teleport(CFrame.new(1.8703980445862, 53.57190322876, -188.37982177734))
         end
+end)
+
+b:Toggle("Auto Kill Sharks #2 (BETA AND BUGGY)",function(bool)
+    shared.toggle = bool
+    if shared.toggle == true then
+    fuckMonster = RunService.Stepped:Connect(function()
+    for i, v in pairs(game.Workspace:GetChildren()) do
+    if v:FindFirstChild("Health") and v:FindFirstChild("IsSeaMonster") and v.Name == "GreatWhiteShark" or v.Name == "BigGreatWhiteShark" or v.Name == "KillerWhale" or v.Name == "NeonGreatWhiteShark" or v.Name == "MobyWood" then
+        teleport(v.HumanoidRootPart.CFrame - Vector3.new(30, 0, 30))
+        local monsterName = v.Name
+        wait(0.25)
+        for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Interface.Inventory.QuickAccess:GetDescendants()) do
+            if v.ClassName == "Tool" then
+                if table.find(spears, v.Name) then
+                    game:GetService("ReplicatedStorage").CloudFrameShared.DataStreams.MonsterHit:FireServer(workspace[monsterName], v.Name, true)
+                    break
+                end
+            end
+        end
+    else
+        for i,v in pairs(game:GetService("Workspace").DroppedItems:GetDescendants()) do
+            if v.ClassName == "MeshPart" then
+                teleport(v.CFrame)
+                wait(0.25)
+            end
+        end
+    end
+     end
+     end)
+    else
+         fuckMonster:Disconnect()
+          teleport(CFrame.new(1.8703980445862, 53.57190322876, -188.37982177734))
+        end
+end)
+
+b:Toggle("Auto Loot Ships",function(bool)
+    shared.autoCollectShips = bool
+
+    if shared.autoCollectShips == true then
+        collectShips = RunService.Stepped:Connect(function()
+            for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
+                if table.find(Ships, v.Name) then
+                    local shipName = v.Name
+                    for i,v in pairs(game:GetService("Workspace")[v.Name]:GetDescendants()) do     
+                        if v.Name == "ProximityPrompt" then                    
+                            teleport(v.Parent.CFrame)
+                            for i,v in pairs(game:GetService("Workspace")[shipName]:GetDescendants()) do
+                                if v.ClassName == "Folder" and v.Name == "Rarities" then
+                                    local args = {
+                                        [1] = workspace[shipName]:FindFirstChild(v.Parent.Name)
+                                    }
+                                    game:GetService("ReplicatedStorage").CloudFrameShared.DataStreams.OpenChestFunction:InvokeServer(unpack(args))
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    else
+        collectShips:Disconnect()
+        teleport(CFrame.new(1.8703980445862, 53.57190322876, -188.37982177734))
+    end
 end)
 
 b:Toggle("Auto Fish",function(bool)
