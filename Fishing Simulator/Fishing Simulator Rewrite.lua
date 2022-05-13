@@ -14,8 +14,9 @@ local owners = {
 }
 
 local testers = {
-	""
+	"3478289766"
 }
+
 local admins = {
 	""
 }
