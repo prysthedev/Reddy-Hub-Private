@@ -1,25 +1,35 @@
---Wait when the game is loading
-repeat wait() until game:IsLoaded() wait()
-game:GetService("Players").LocalPlayer.Idled:connect(function()
-game:GetService("VirtualUser"):ClickButton2(Vector2.new())
-end)
-
 --Locker
 shared.lockedScript_gerg487G8gre7 = true
 local playerId = game:GetService("Players").LocalPlayer.UserId
+local playerUsername = game:GetService("Players").LocalPlayer.Name
 
 local owners = {
 	"2657770337",
 	"3036303121"
 }
 
+local names = {
+	"Iamnoble_1",
+	"despairDCLXVI",
+	"yaxausevenom"
+}
+
 local testers = {
-	"3478289766"
+	"3478289766",
+	"3402794295"
 }
 
 local admins = {
 	""
 }
+
+--Anti AFK
+local vu = game:GetService("VirtualUser")
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+   wait(1)
+   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
 
 function loadScript()
 	spawn(function()
@@ -603,14 +613,26 @@ end
 --Loader
 if shared.lockedScript_gerg487G8gre7 == true then
 	if table.find(owners, tostring(playerId)) then
-		print("Welcome! Your rank is: Owner")
-		loadScript()
+		if table.find(names, playerUsername) then
+			print("Welcome! Your rank is: Owner")
+			loadScript()
+		else
+			game.Players.LocalPlayer:Kick("You are not whitelisted. Your ID: " .. playerId)
+		end
 	elseif table.find(admins, tostring(playerId)) then
-		print("Welcome! Your rank is: Admin")
-		loadScript()
+		if table.find(names, playerUsername) then
+			print("Welcome! Your rank is: Admin")
+			loadScript()
+		else
+			game.Players.LocalPlayer:Kick("You are not whitelisted. Your ID: " .. playerId)
+		end
 	elseif table.find(testers, tostring(playerId)) then
-		print("Welcome! Your rank is: Tester")
-		loadScript()
+		if table.find(names, playerUsername) then
+			print("Welcome! Your rank is: Tester")
+			loadScript()
+		else
+			game.Players.LocalPlayer:Kick("You are not whitelisted. Your ID: " .. playerId)
+		end
 	else
 		game.Players.LocalPlayer:Kick("You are not whitelisted. Your ID: " .. playerId)
 	end
