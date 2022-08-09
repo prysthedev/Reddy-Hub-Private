@@ -21,6 +21,15 @@ local AutoFarm =
     }
 )
 
+local Teleport =
+    Window:MakeTab(
+    {
+        Name = "Teleport",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    }
+)
+
 local Crates =
     Window:MakeTab(
     {
@@ -223,40 +232,38 @@ AutoFarm:AddToggle(
             killSharks =
                 RunService.Stepped:Connect(
                 function()
-                        if shared.toggle == true then
-                            pcall(
-                                for i, v in pairs(game.Workspace:GetChildren()) do
-                                    if
-                                        v:FindFirstChild("Health") and v:FindFirstChild("IsSeaMonster") and
-                                            v.Name == "GreatWhiteShark" or
-                                            v.Name == "BigGreatWhiteShark" or
-                                            v.Name == "KillerWhale" or
-                                            v.Name == "NeonGreatWhiteShark" or
-                                            v.Name == "MobyWood"
-                                    then
-                                        teleport(v.HumanoidRootPart.CFrame - Vector3.new(30, 0, 30))
-                                        local monsterName = v.Name
-                                        wait(0.25)
-                                        for i, v in pairs(
-                                            game:GetService("Players").LocalPlayer.PlayerGui.Interface.Inventory.QuickAccess:GetDescendants(
+                    if shared.toggle == true then
+                        for i, v in pairs(game.Workspace:GetChildren()) do
+                            if
+                                v:FindFirstChild("Health") and v:FindFirstChild("IsSeaMonster") and
+                                    v.Name == "GreatWhiteShark" or
+                                    v.Name == "BigGreatWhiteShark" or
+                                    v.Name == "KillerWhale" or
+                                    v.Name == "NeonGreatWhiteShark" or
+                                    v.Name == "MobyWood"
+                             then
+                                teleport(v.HumanoidRootPart.CFrame - Vector3.new(30, 0, 30))
+                                local monsterName = v.Name
+                                wait(0.25)
+                                for i, v in pairs(
+                                    game:GetService("Players").LocalPlayer.PlayerGui.Interface.Inventory.QuickAccess:GetDescendants(
 
+                                    )
+                                ) do
+                                    if v.ClassName == "Tool" then
+                                        if table.find(spears, v.Name) then
+                                            game:GetService("ReplicatedStorage").CloudFrameShared.DataStreams.MonsterHit:FireServer(
+                                                workspace[monsterName],
+                                                v.Name,
+                                                true
                                             )
-                                        ) do
-                                            if v.ClassName == "Tool" then
-                                                if table.find(spears, v.Name) then
-                                                    game:GetService("ReplicatedStorage").CloudFrameShared.DataStreams.MonsterHit:FireServer(
-                                                        workspace[monsterName],
-                                                        v.Name,
-                                                        true
-                                                    )
-                                                    break
-                                                end
-                                            end
+                                            break
                                         end
                                     end
                                 end
-                            )
+                            end
                         end
+                    end
                 end
             )
             if shared.toggle == false then
@@ -278,12 +285,12 @@ AutoFarm:AddToggle(
         Name = "Auto Fish",
         Default = false,
         Callback = function(Value)
-        shared.autoFish = Value
-		while shared.autoFish do
-            autoFish()
-            wait(shared.autoFishCooldown)
+            shared.autoFish = Value
+            while shared.autoFish do
+                autoFish()
+                wait(shared.autoFishCooldown)
+            end
         end
-    end
     }
 )
 
@@ -321,7 +328,7 @@ AutoFarm:AddToggle(
                         end
                     end
                 end
-            wait(5)
+                wait(5)
             end
         end
     }
@@ -339,15 +346,420 @@ AutoFarm:AddToggle(
         Name = "Auto Sell",
         Default = false,
         Callback = function(Value)
-        shared.autoSell = Value
-		while shared.autoSell do
-            local args = {
-                [1] = "SellEverything"
-            }
+            shared.autoSell = Value
+            while shared.autoSell do
+                local args = {
+                    [1] = "SellEverything"
+                }
 
-            game:GetService("ReplicatedStorage").CloudFrameShared.DataStreams.processGameItemSold:InvokeServer(unpack(args))
-            wait(shared.autoSellCooldown)
+                game:GetService("ReplicatedStorage").CloudFrameShared.DataStreams.processGameItemSold:InvokeServer(
+                    unpack(args)
+                )
+                wait(shared.autoSellCooldown)
             end
+        end
+    }
+)
+
+Crates:AddToggle(
+    {
+        Name = "Auto Open Stone Crate",
+        Default = false,
+        Callback = function(Value)
+            shared.autoOpenStoneChest = Value
+
+            while shared.autoOpenStoneChest do
+                autoOpenChest("stonechest")
+                wait(shared.autoOpenCrateCooldown)
+            end
+        end
+    }
+)
+
+Crates:AddToggle(
+    {
+        Name = "Auto Open Silver Crate",
+        Default = false,
+        Callback = function(Value)
+            shared.autoOpenSilverChest = Value
+
+            while shared.autoOpenSilverChest do
+                autoOpenChest("silverchest")
+                wait(shared.autoOpenCrateCooldown)
+            end
+        end
+    }
+)
+
+Crates:AddToggle(
+    {
+        Name = "Auto Open Gold Chest",
+        Default = false,
+        Callback = function(Value)
+            shared.autoOpenGoldChest = Value
+
+            while shared.autoOpenGoldChest do
+                autoOpenChest("goldchest")
+                wait(shared.autoOpenCrateCooldown)
+            end
+        end
+    }
+)
+
+Upgrades:AddToggle(
+    {
+        Name = "Auto Upgrade Hook Speed",
+        Default = false,
+        Callback = function(Value)
+            shared.autoUpgradeHookSpeed = Value
+
+            while shared.autoUpgradeHookSpeed do
+                autoUpgrade("Hook Speed")
+                wait(shared.autoUpgradeCooldown)
+            end
+        end
+    }
+)
+
+Upgrades:AddToggle(
+    {
+        Name = "Auto Upgrade Reeling Speed",
+        Default = false,
+        Callback = function(Value)
+            shared.autoUpgradeReelingSpeed = Value
+
+            while shared.autoUpgradeReelingSpeed do
+                autoUpgrade("Reeling Speed")
+                wait(shared.autoUpgradeCooldown)
+            end
+        end
+    }
+)
+
+Upgrades:AddToggle(
+    {
+        Name = "Auto Upgrade Strength",
+        Default = false,
+        Callback = function(Value)
+            shared.autoUpgradeStrenght = Value
+
+            while shared.autoUpgradeStrenght do
+                autoUpgrade("Strength")
+                wait(shared.autoUpgradeCooldown)
+            end
+        end
+    }
+)
+
+Teleport:AddButton(
+    {
+        Name = "Teleport To Supplies Store",
+        Callback = function()
+            teleportToLocation("SuppliesStoreInterior", "Inside")
+        end
+    }
+)
+
+Teleport:AddButton(
+    {
+        Name = "Teleport To Tavern",
+        Callback = function()
+            teleportToLocation("TavernInterior", "Inside")
+        end
+    }
+)
+
+Teleport:AddButton(
+    {
+        Name = "Teleport To Pets Store",
+        Callback = function()
+            teleportToLocation("PetShop", "MainEntrance")
+        end
+    }
+)
+
+Teleport:AddButton(
+    {
+        Name = "Teleport To Rodney's Home",
+        Callback = function()
+            teleportToLocation("LivingSpaceInterior", "Inside")
+        end
+    }
+)
+
+Teleport:AddButton(
+    {
+        Name = "Teleport To Boat Shop",
+        Callback = function()
+            teleportToLocation("BoatShopInterior", "Inside")
+        end
+    }
+)
+
+Teleport:AddButton(
+    {
+        Name = "Teleport To Eruption Island",
+        Callback = function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                CFrame.new(
+                2689.80908,
+                42.7682953,
+                1484.38342,
+                -0.1800908,
+                3.48670461e-08,
+                -0.983649969,
+                3.66638169e-08,
+                1,
+                2.8734032e-08,
+                0.983649969,
+                -3.08896269e-08,
+                -0.1800908
+            )
+        end
+    }
+)
+
+Teleport:AddButton(
+    {
+        Name = "Teleport To Shadow Isles",
+        Callback = function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                CFrame.new(
+                2197.50464,
+                43.3072357,
+                -2223.0498,
+                0.997799814,
+                3.19511173e-08,
+                0.066299215,
+                -3.31668524e-08,
+                1,
+                1.72364061e-08,
+                -0.066299215,
+                -1.93974188e-08,
+                0.997799814
+            )
+        end
+    }
+)
+
+Teleport:AddButton(
+    {
+        Name = "Teleport To Ancient Shores",
+        Callback = function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                CFrame.new(
+                -2342.73145,
+                41.7132492,
+                -1764.89099,
+                0.269242913,
+                -1.32969422e-08,
+                0.9630723,
+                8.73161738e-08,
+                1,
+                -1.06038955e-08,
+                -0.9630723,
+                8.69468124e-08,
+                0.269242913
+            )
+        end
+    }
+)
+
+Teleport:AddButton(
+    {
+        Name = "Teleport To Pharaoh's Dunes",
+        Callback = function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                CFrame.new(
+                -4163.71826,
+                41.6461487,
+                425.615601,
+                0.0506599918,
+                1.00352544e-07,
+                0.998715937,
+                -4.27083684e-08,
+                1,
+                -9.83151764e-08,
+                -0.998715937,
+                -3.76728835e-08,
+                0.0506599918
+            )
+        end
+    }
+)
+
+Misc:AddToggle(
+    {
+        Name = "Auto Lock Mythicals",
+        Default = false,
+        Callback = function(Value)
+            shared.autoLockMythicals = Value
+            lockMythicals =
+                RunService.Stepped:Connect(
+                function()
+                    if shared.autoLockMythicals == true then
+                        for i, v in pairs(
+                            game:GetService("Players").LocalPlayer.PlayerGui.Interface.Inventory.Inventory.Frame.Backpack.List.Container:GetDescendants(
+
+                            )
+                        ) do
+                            if v.ClassName == "Tool" then
+                                if table.find(mythicals, v.Name) then
+                                    local args = {
+                                        [1] = "Tools",
+                                        [2] = v.Parent.Parent.Parent.Parent.Parent.Name,
+                                        [3] = true
+                                    }
+
+                                    game:GetService("ReplicatedStorage").CloudFrameShared.DataStreams.SetInventoryItemLock:InvokeServer(
+                                        unpack(args)
+                                    )
+                                end
+                            end
+                        end
+                    end
+                end
+            )
+            if shared.autoLockMythicals == false then
+                lockMythicals:Disconnect()
+            end
+        end
+    }
+)
+
+Misc:AddToggle(
+    {
+        Name = "Auto Lock Legendary",
+        Default = false,
+        Callback = function(Value)
+            shared.autoLocklegendary = Value
+            lockLegendary =
+                RunService.Stepped:Connect(
+                function()
+                    if shared.autoLocklegendary == true then
+                        for i, v in pairs(
+                            game:GetService("Players").LocalPlayer.PlayerGui.Interface.Inventory.Inventory.Frame.Backpack.List.Container:GetDescendants(
+
+                            )
+                        ) do
+                            if v.ClassName == "Tool" then
+                                if table.find(legendary, v.Name) then
+                                    local args = {
+                                        [1] = "Tools",
+                                        [2] = v.Parent.Parent.Parent.Parent.Parent.Name,
+                                        [3] = true
+                                    }
+
+                                    game:GetService("ReplicatedStorage").CloudFrameShared.DataStreams.SetInventoryItemLock:InvokeServer(
+                                        unpack(args)
+                                    )
+                                end
+                            end
+                        end
+                    end
+                end
+            )
+            if shared.autoLocklegendary == false then
+                lockLegendary:Disconnect()
+            end
+        end
+    }
+)
+Misc:AddToggle(
+    {
+        Name = "Auto Lock Key",
+        Default = false,
+        Callback = function(Value)
+            shared.autoLockKey = Value
+            lockKey =
+                RunService.Stepped:Connect(
+                function()
+                    if shared.autoLockKey == true then
+                        for i, v in pairs(
+                            game:GetService("Players").LocalPlayer.PlayerGui.Interface.Inventory.Inventory.Frame.Backpack.List.Container:GetDescendants(
+
+                            )
+                        ) do
+                            if v.ClassName == "Tool" then
+                                if table.find(key, v.Name) then
+                                    local args = {
+                                        [1] = "Tools",
+                                        [2] = v.Parent.Parent.Parent.Parent.Parent.Name,
+                                        [3] = true
+                                    }
+
+                                    game:GetService("ReplicatedStorage").CloudFrameShared.DataStreams.SetInventoryItemLock:InvokeServer(
+                                        unpack(args)
+                                    )
+                                end
+                            end
+                        end
+                    end
+                end
+            )
+            if shared.autoLockKey == false then
+                lockKey:Disconnect()
+            end
+        end
+    }
+)
+
+Settings:AddSlider(
+    {
+        Name = "Auto Sell Cooldown",
+        Min = 0,
+        Max = 10,
+        Default = 5,
+        Color = Color3.fromRGB(255, 255, 255),
+        Increment = 1,
+        ValueName = "Seconds",
+        Callback = function(Value)
+            shared.autoSellCooldown = Value
+        end
+    }
+)
+
+Settings:AddSlider(
+    {
+        Name = "Auto Fish Cooldown",
+        Min = 2,
+        Max = 10,
+        Default = 2,
+        Color = Color3.fromRGB(255, 255, 255),
+        Increment = 1,
+        ValueName = "Seconds",
+        Callback = function(Value)
+            shared.autoFishCooldown = Value
+        end
+    }
+)
+
+Settings:AddSlider(
+    {
+        Name = "Auto Open Crate Cooldown",
+        Min = 0,
+        Max = 10,
+        Default = 1,
+        Color = Color3.fromRGB(255, 255, 255),
+        Increment = 1,
+        ValueName = "Seconds",
+        Callback = function(Value)
+            shared.autoOpenCrateCooldown = Value
+        end
+    }
+)
+
+Settings:AddSlider(
+    {
+        Name = "Auto Upgrade Cooldown",
+        Min = 0,
+        Max = 10,
+        Default = 1,
+        Color = Color3.fromRGB(255, 255, 255),
+        Increment = 1,
+        ValueName = "Seconds",
+        Callback = function(Value)
+            shared.autoUpgradeCooldown = Value
         end
     }
 )
