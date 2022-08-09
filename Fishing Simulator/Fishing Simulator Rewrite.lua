@@ -1,5 +1,5 @@
 --Locker
-shared.lockedScript_gerg487G8gre7 = true
+shared.lockedScript_gerg487G8gre7 = false
 local playerId = game:GetService("Players").LocalPlayer.UserId
 local playerUsername = game:GetService("Players").LocalPlayer.Name
 
@@ -30,6 +30,12 @@ game:GetService("Players").LocalPlayer.Idled:connect(function()
    wait(1)
    vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
 end)
+
+local library1 = loadstring(game:HttpGet("https://raw.githubusercontent.com/reddythedev/robloxthings/main/Library"))()
+local FinityWindow = library1.new(true)
+FinityWindow.ChangeToggleKey(Enum.KeyCode.RightShift)
+
+local Key = FinityWindow:Category("Key")
 
 function loadScript()
 	spawn(function()
@@ -220,48 +226,48 @@ function loadScript()
 		)
 
 		--Auto Kill Sharks Method #2 (Still in development)
-		AutoFarm:Cheat(
-			"Checkbox",
-			"Auto Kill Sharks #2 (BETA AND BUGGY)",
-			function(State)
-				shared.toggle = State
+		--AutoFarm:Cheat(
+			--"Checkbox",
+			--"Auto Kill Sharks #2 (BETA AND BUGGY)",
+			--function(State)
+				--shared.toggle = State
 
-				if shared.toggle == true then
-					killSharks = RunService.Stepped:Connect(function()
-						for i, v in pairs(game.Workspace:GetChildren()) do
-							if v:FindFirstChild("Health") and v:FindFirstChild("IsSeaMonster") and v.Name == "GreatWhiteShark" or v.Name == "BigGreatWhiteShark" or v.Name == "KillerWhale" or v.Name == "NeonGreatWhiteShark" or v.Name == "MobyWood" then
-								teleport(v.HumanoidRootPart.CFrame - Vector3.new(30, 0, 30))
-								local monsterName = v.Name
-								wait(0.25)
-								for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Interface.Inventory.QuickAccess:GetDescendants()) do
-									if v.ClassName == "Tool" then
-										if table.find(spears, v.Name) then
-											game:GetService("ReplicatedStorage").CloudFrameShared.DataStreams.MonsterHit:FireServer(workspace[monsterName], v.Name, true)
-											break
-										end
-									end
-								end
-							else
-								for i,v in pairs(game:GetService("Workspace").DroppedItems:GetDescendants()) do
-									if v.ClassName == "MeshPart" then
-										teleport(v.CFrame)
-										wait(0.25)
-									end
-								end
-							end
-						end
-					end)
-				else
-					killSharks:Disconnect()
-					teleport(CFrame.new(1.8703980445862, 53.57190322876, -188.37982177734))
-				end
-			end
-		)
+				--if shared.toggle == true then
+					--killSharks = RunService.Stepped:Connect(function()
+						--for i, v in pairs(game.Workspace:GetChildren()) do
+							--if v:FindFirstChild("Health") and v:FindFirstChild("IsSeaMonster") and v.Name == "GreatWhiteShark" or v.Name == "BigGreatWhiteShark" or v.Name == "KillerWhale" or v.Name == "NeonGreatWhiteShark" or v.Name == "MobyWood" then
+								--teleport(v.HumanoidRootPart.CFrame - Vector3.new(30, 0, 30))
+								--local monsterName = v.Name
+								--wait(0.25)
+								--for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Interface.Inventory.QuickAccess:GetDescendants()) do
+									--if v.ClassName == "Tool" then
+										--if table.find(spears, v.Name) then
+											--game:GetService("ReplicatedStorage").CloudFrameShared.DataStreams.MonsterHit:FireServer(workspace[monsterName], v.Name, true)
+											--break
+										--end
+									--end
+								--end
+							--else
+								--for i,v in pairs(game:GetService("Workspace").DroppedItems:GetDescendants()) do
+									--if v.ClassName == "MeshPart" then
+										--teleport(v.CFrame)
+										--wait(0.25)
+									--end
+								--end
+							--end
+						--end
+					--end)
+				--else
+					--killSharks:Disconnect()
+					--teleport(CFrame.new(1.8703980445862, 53.57190322876, -188.37982177734))
+				--end
+			--end
+		--)
 
 		--Auto Loot Ships
 		AutoFarm:Cheat(
 			"Checkbox",
-			"Auto Loot Ships",
+			"Auto Loot Ships (Really Laggy)",
 			function(State)
 			shared.autoCollectShips = State
 

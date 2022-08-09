@@ -1,4 +1,4 @@
-shared.waitTimeBeforeJoiningNewServer = 20
+shared.waitTimeBeforeJoiningNewServer = 25
 
 repeat wait() until game:IsLoaded()
 
