@@ -98,7 +98,7 @@ end
 
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
-local Window = OrionLib:MakeWindow({Name = "Reddy Hub: "..GameName})
+local Window = OrionLib:MakeWindow({Name = "Reddy Hub: "..GameName, IntroText = "Reddy Hub"})
 
 local Main = Window:MakeTab({
 	Name = "Main",
