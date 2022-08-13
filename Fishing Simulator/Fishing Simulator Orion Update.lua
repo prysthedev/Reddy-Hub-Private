@@ -30,6 +30,15 @@ local Teleport =
     }
 )
 
+local Movement =
+    Window:MakeTab(
+    {
+        Name = "Movement",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    }
+)
+
 local Crates =
     Window:MakeTab(
     {
@@ -760,6 +769,36 @@ Settings:AddSlider(
         ValueName = "Seconds",
         Callback = function(Value)
             shared.autoUpgradeCooldown = Value
+        end
+    }
+)
+
+Movement:AddSlider(
+    {
+        Name = "Walk Speed",
+        Min = 16,
+        Max = 200,
+        Default = 16,
+        Color = Color3.fromRGB(255, 255, 255),
+        Increment = 1,
+        ValueName = "Speed",
+        Callback = function(Value)
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+        end
+    }
+)
+
+Movement:AddSlider(
+    {
+        Name = "Jump Power",
+        Min = 50,
+        Max = 500,
+        Default = 50,
+        Color = Color3.fromRGB(255, 255, 255),
+        Increment = 1,
+        ValueName = "Power",
+        Callback = function(Value)
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
         end
     }
 )
