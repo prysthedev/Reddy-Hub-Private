@@ -284,7 +284,7 @@ Main:AddToggle({
         ValueG = BooleanG
         while ValueG do task.wait(0.5)
         if ValueG == false then break; end
-        local PATH = game:GetService("Players").Uvxtq.PlayerGui.MainGui.Frames.Inventory.Main.Configure.EquipBest
+        local PATH = game:GetService("Players").LocalPlayer.PlayerGui.MainGui.Frames.Inventory.Main.Configure.EquipBest
             firesignal(PATH.Activated)
         end
     end    
