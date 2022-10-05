@@ -1,7 +1,35 @@
 --[[
     Todo: 
         [+] Make the script cleaner and faster.
+        [+] Add Auto RAID killer.
+        [+] Add Notification when a comet is formed/added. 
 ]]--
+
+Hint = Instance.new("Hint", game.CoreGui)
+Hint.Text = "Report any bugs errors you see to the discord"
+task.wait(1)
+Hint.Text = "Reddy Hub Is Waiting for the game to load..."
+
+warn('ReddyHub is:')
+int=0;repeat task.wait()if int > 100 then warn(tostring(int +.1).."% loaded")int+=1;end;until game:IsLoaded()warn("100% loaded")
+    game:GetService("Players").LocalPlayer.Idled:Connect(function()
+    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+end)
+
+Hint.Text = "Reddy Hub Is Setting up environment..."
+
+-- Environment 
+local getrawmetatable = getrawmetatable or false
+local getsenv = getsenv or false
+local listfiles = listfiles or listdir or syn_io_listdir or false
+local isfolder = isfolder or false
+local hookfunc = hookfunc or hookfunction or replaceclosure or false
+
+if (getrawmetatable == false) then return game.Players.LocalPlayer:Kick("Exploit not supported!") end
+if (getsenv == false) then return game.Players.LocalPlayer:Kick("Exploit not supported!") end
+if (listfiles == false) then return game.Players.LocalPlayer:Kick("Exploit not supported!") end
+if (isfolder == false) then return game.Players.LocalPlayer:Kick("Exploit not supported!") end
+if (hookfunc == false) then return game.Players.LocalPlayer:Kick("Exploit not supported!") end
 
 local function service(...) return game:GetService(...) end
 
@@ -14,7 +42,6 @@ local HttpService = service("HttpService")
 local ReplicatedStorage = service("ReplicatedStorage")
 local VirtualUser = service("VirtualUser")
 local Humanoid = game.Players.LocalPlayer.Character.Humanoid
-
 local GameName = MarketplaceService:GetProductInfo(game.PlaceId).Name
 
 local StarterWorld = "Demon Village"
@@ -98,7 +125,7 @@ end
 
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
-local Window = OrionLib:MakeWindow({Name = "Reddy Hub: "..GameName, IntroText = "Reddy Hub"})
+local Window = OrionLib:MakeWindow({Name = "Reddy Hub: "..GameName})
 
 local Main = Window:MakeTab({
 	Name = "Main",
@@ -127,6 +154,36 @@ local Credits = Window:MakeTab({
 local Discord = Window:MakeTab({
 	Name = "Discord",
 	Icon = "rbxassetid://8950218710",
+})
+
+Hint.Text = "Reddy Hub Is Now Loading..."
+
+Main:AddButton({
+    Name = "Join Server With 0 People",
+    Callback = function()
+        spawn(function() 
+            local pathSolo = game:GetService("Players").LocalPlayer.PlayerGui.MainGui.Frames.Settings.Main.ScrollList.PlaySolo.ImageButton
+            firesignal(pathSolo.Activated)
+            
+            function queueOnTeleport(str)
+                if identifyexecutor() == "Synapse X" then
+                    pcall(function()
+                        syn.queue_on_teleport(str)
+                    end)
+                else 
+                    local suc,err = pcall(function() queue_on_teleport(str) end)
+                    if err then
+                        print("Error occured, trying again...")
+                        local suc,eror = pcall(function() queue_on_teleport(str) end)
+                            if eror then print("Cant queue teleport") end
+                        end
+                    end
+                end
+            queueOnTeleport([[
+                loadstring(game:HttpGet('https://raw.githubusercontent.com/reddythedev/Reddy-Hub/main/8585657145'))()
+            ]])
+        end)
+    end
 })
 
 Main:AddDropdown({
@@ -174,8 +231,8 @@ end
 
 Main:AddSlider({
 	Name = "AutoFarm NPC x-axis",
-	Min = -10,
-	Max = 10,
+	Min = -15,
+	Max = 15,
 	Default = 0,
 	Color = Color3.fromRGB(255,255,255),
 	Increment = 0.5,
@@ -185,7 +242,7 @@ Main:AddSlider({
     end
 })
 
-Main:AddParagraph("AutoFarm NPC x-axis","This is good, so people can't see your username. (-10 studs recommended)")
+Main:AddParagraph("AutoFarm NPC x-axis","This is good, so people can't see your username. (-10 studs recommended for non-bosses and -15 recommended for bosses.)")
 
 Main:AddToggle({
     Name = "AutoFarm NPC",
@@ -272,7 +329,7 @@ Main:AddToggle({
         while ValueF do task.wait(0.5)
         if ValueF == false then break; end
             for _,Weapon in next, getWeapons() do
-                game:GetService("ReplicatedStorage").Remotes.WeaponEvolve:FireServer(Weapon)
+                ReplicatedStorage.Remotes.WeaponEvolve:FireServer(Weapon)
             end
         end
     end    
@@ -284,11 +341,24 @@ Main:AddToggle({
         ValueG = BooleanG
         while ValueG do task.wait(0.5)
         if ValueG == false then break; end
-        local PATH = game:GetService("Players").LocalPlayer.PlayerGui.MainGui.Frames.Inventory.Main.Configure.EquipBest
+        local PATH = Players.LocalPlayer.PlayerGui.MainGui.Frames.Inventory.Main.Configure.EquipBest
             firesignal(PATH.Activated)
         end
     end    
 })
+
+Main:AddToggle({
+    Name = "Auto Equip Best (Companion)",
+    Callback = function(BooleanH)
+        ValueH = BooleanH
+        while ValueH do task.wait(0.5)
+        if ValueH == false then break; end
+        local PATH = Players.LocalPlayer.PlayerGui.MainGui.Frames.Companions.Main.Configure.EquipBest
+            firesignal(PATH.Activated)
+        end
+    end    
+})
+
 
 Eggs:AddDropdown({
     Name = "Select A Egg To Auto Open",
@@ -333,14 +403,15 @@ Teleport:AddDropdown({
 })
 
 Credits:AddParagraph("Credits","Kaoru~#6438 for scripting the entire script and engo#0320 for helping with the auto collect coins cause im a moron! :)")
-
+--[[
 LocalPlayer:AddToggle({
     Name = "Speed Toggle",
     Callback = function(speedToggleVal)
         _G.speedToggle = speedToggleVal
     end    
 })
-
+]]
+--[[
 LocalPlayer:AddSlider({
 	Name = "WalkSpeed",
 	Min = 16,
@@ -355,6 +426,7 @@ LocalPlayer:AddSlider({
         end
     end
 })
+]]
 
 Discord:AddButton({
 	Name = "Join Our Discord Server",
@@ -368,14 +440,6 @@ Discord:AddButton({
         discordMain()
     end
 })
-
-spawn(function()
-    game:GetService("Players").LocalPlayer.Idled:connect(function()
-        VirtualUser:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-    wait(1)
-        VirtualUser:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-    end)
-end)
 
 if game.CoreGui:FindFirstChild("Reddy") then
 	OrionLib:MakeNotification({
@@ -391,3 +455,9 @@ else
         Time = 5
     })
 end
+
+Hint.Text = "Reddy Hub's Loading Is Now Finished!"
+task.wait(1.5)
+Hint:Destroy()
+
+OrionLib:Init()
