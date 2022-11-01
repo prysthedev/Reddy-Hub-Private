@@ -2,24 +2,25 @@ getgenv().autoSell = false
 getgenv().infiniteMoney = false
 getgenv().infiniteLevels = false
 
-local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 
-local GUI = Mercury:Create{
-    Name = "Destruction Simulator",
-    Size = UDim2.fromOffset(600, 400),
-    Theme = Mercury.Themes.Dark,
-    Link = "https://discord.gg/HjdtekKvDs"
-}
+local Window = Rayfield:CreateWindow({
+	Name = "Reddy Hub: Destruction Simulator",
+	LoadingTitle = "Reddy Hub",
+	LoadingSubtitle = "by Reddy",
+	ConfigurationSaving = {
+		Enabled = false,
+		FileName = "Big Hub"
+	},
+	KeySystem = false, -- Set this to true to use our key system
+})
 
-local Tab = GUI:Tab{
-	Name = "Main",
-}
+local Tab = Window:CreateTab("Main")
 
-Tab:Button{
+local Button = Tab:CreateButton({
 	Name = "Make your gun OP",
-	Description = "This will remove reload cooldown from your gun.",
 	Callback = function()
-        game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
+		game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
         for i,v in pairs(game.Players.LocalPlayer.Backpack:getDescendants()) do
             if v.Name == "Stats" then
                 local gunStats = v
@@ -29,69 +30,48 @@ Tab:Button{
                 g.BlastRadius = math.huge
                 g.RocketSpeed = math.huge
                 g.ShotgunAmount = 50
+            end
         end
-    end
-    GUI:Notification{
-        Title = "Notification",
-        Text = "Made your gun OP.",
-        Duration = 3,
-        Callback = function() end
-    }
-    end
-}
+	end,
+})
 
-Tab:Button{
-	Name = "Copy Discord Invite",
-	Description = "This will copy discord invite into your clipboard.",
-	Callback = function()
-        setclipboard("https://discord.gg/HjdtekKvDs")
-        GUI:Notification{
-            Title = "Notification",
-            Text = "Copied discord server to your clipboard.",
-            Duration = 3,
-            Callback = function() end
-        }
-    end
-}
-
-Tab:Toggle{
-	Name = "AutoSell",
-	StartingState = false,
-	Description = nil,
-	Callback = function(state) 
-        getgenv().autoSell = state
+local Toggle = Tab:CreateToggle({
+	Name = "Auto Sell",
+	CurrentValue = false,
+	Callback = function(Value)
+		getgenv().autoSell = Value
         autoSell()
-    end
-}
+	end,
+})
 
-Tab:Toggle{
+local Toggle = Tab:CreateToggle({
 	Name = "Get Infinite Money",
-	StartingState = false,
-	Description = nil,
-	Callback = function(state) 
-        getgenv().infiniteMoney = state
+	CurrentValue = false,
+	Callback = function(Value)
+		getgenv().infiniteMoney = Value
         getInfiniteMoney()
-    end
-}
+	end,
+})
 
-Tab:Toggle{
+local Toggle = Tab:CreateToggle({
 	Name = "Get Infinite Levels",
-	StartingState = false,
-	Description = nil,
-	Callback = function(state) 
-        getgenv().infiniteLevels = state
+	CurrentValue = false,
+	Callback = function(Value)
+		getgenv().infiniteLevels = Value
         getInfiniteLevels()
-    end
-}
+	end,
+})
 
-
-b:Slider("WalkSpeed",{
-    min = 16;
-    max = 300;
-    precise = true;
-},function(value)
-    changeWalkSpeed(value)
-end)
+local Slider = Tab:CreateSlider({
+	Name = "Walkspeed",
+	Range = {16, 300},
+	Increment = 1,
+	Suffix = "Speed",
+	CurrentValue = 16,
+	Callback = function(Value)
+		changeWalkSpeed(Value)
+	end,
+})
 
 print("This script is created by Reddy#6616")
 
