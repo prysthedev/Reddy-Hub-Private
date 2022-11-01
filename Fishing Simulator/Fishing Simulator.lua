@@ -18,7 +18,7 @@ local Window = Rayfield:CreateWindow({
 		Title = "Reddy's Hub",
 		Subtitle = "Key System",
 		Note = "Join the discord (discord.gg/YFgFhUWNFC)",
-		Key = "1$QmYc%$0Gr!ek*e4Oq09T7!"
+		Key = "u4Ak#Z1g4fbJ%$4gB0Awg&5w"
 	}
 })
 

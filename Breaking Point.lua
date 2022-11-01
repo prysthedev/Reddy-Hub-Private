@@ -11,98 +11,100 @@ game:GetService("Players").LocalPlayer.Idled:connect(function()
 game:GetService("VirtualUser"):ClickButton2(Vector2.new())
 end)
 
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/reddythedev/robloxthings/main/Library"))()
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 
-local FinityWindow = library.new(true)
-FinityWindow.ChangeToggleKey(Enum.KeyCode.RightShift)
-
-local Main = FinityWindow:Category("Main")
-
-local Crates = Main:Sector("Crates")
-local AutoFarm = Main:Sector("Main")
-local Discord = Main:Sector("Discord")
-
-Crates:Cheat("Dropdown", "Select Gun Crate", function(Option)
-	shared.gunCrate = Option
-end, {
-	options = {
-		"Colors",
-		"Regular Case",
-		"Uncommon Case",
-		"Rare Case",
-		"Legendary Case"
+local Window = Rayfield:CreateWindow({
+	Name = "Reddy Hub: Breaking Point (Outdated)",
+	LoadingTitle = "Reddy Hub...",
+	LoadingSubtitle = "by Reddy and his team",
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = "Reddy Hub",
+		FileName = "Breaking Point"
+	},
+	KeySystem = true,
+	KeySettings = {
+		Title = "Reddy's Hub",
+		Subtitle = "Key System",
+		Note = "Join the discord (discord.gg/YFgFhUWNFC)",
+		Key = "z5#8yiBUBqO&5^W7UBNfY9M2"
 	}
 })
 
-Crates:Cheat("Dropdown", "Select Knife Crate", function(Option)
-	shared.knifeCrate = Option
-end, {
-	options = {
-		"Colors",
-		"Common Case",
-		"Uncommon Case",
-		"Rare Case",
-		"Legendary Case"
-	}
+local Crates = Window:CreateTab("Crates")
+local AutoFarm = Window:CreateTab("Main")
+
+local Dropdown = Crates:CreateDropdown({
+	Name = "Select Gun Crate",
+	Options = {"Colors","Regular Case","Uncommon Case","Rare Case","Legendary Case"},
+	CurrentOption = "Colors",
+	Flag = "gunCrate",
+	Callback = function(Option)
+        shared.gunCrate = Option
+	end,
 })
 
-Crates:Cheat("Dropdown", "Select Chair Crate", function(Option)
-	shared.chairCrate = Option
-end, {
-	options = {
-		"Colors",
-		"Pattern",
-		"Uncommon Case",
-		"Rare Case",
-		"Legendary Case"
-	}
+local Dropdown = Crates:CreateDropdown({
+	Name = "Select Knife Crate",
+	Options = {"Colors","Common Case","Uncommon Case","Rare Case","Legendary Case"},
+	CurrentOption = "Colors",
+	Flag = "knifeCrate",
+	Callback = function(Option)
+        shared.knifeCrate = Option
+	end,
 })
 
-Crates:Cheat(
-	"Checkbox",
-	"Open Selected Gun Crate",
-	function(State)
-		shared.gunEnabled = State
+local Dropdown = Crates:CreateDropdown({
+	Name = "Select Chair Crate",
+	Options = {"Colors","Pattern","Uncommon Case","Rare Case","Legendary Case"},
+	CurrentOption = "Colors",
+	Flag = "chairCrate",
+	Callback = function(Option)
+        shared.knifeCrate = Option
+	end,
+})
+
+local Toggle = Crates:CreateToggle({
+	Name = "Open Selected Gun Crate",
+	CurrentValue = false,
+	Flag = "openGunCrateToggle",
+	Callback = function(Value)
+		shared.gunEnabled = Value
         openGunCrate(shared.gunCrate)
-	end
-)
+	end,
+})
 
-Crates:Cheat(
-	"Checkbox",
-	"Open Selected Knife Crate",
-	function(State)
-		shared.knifeEnabled = State
+local Toggle = Crates:CreateToggle({
+	Name = "Open Selected Knife Crate",
+	CurrentValue = false,
+	Flag = "openKnifeCrateToggle",
+	Callback = function(Value)
+		shared.knifeEnabled = Value
         openKnifeCrate(shared.knifeCrate)
-	end
-)
+	end,
+})
 
-Crates:Cheat(
-	"Checkbox",
-	"Open Selected Chair Crate",
-	function(State)
-		shared.chairEnabled = State
+local Toggle = Crates:CreateToggle({
+	Name = "Open Selected Chair Crate",
+	CurrentValue = false,
+	Flag = "openChairCrateToggle",
+	Callback = function(Value)
+		shared.chairEnabled = Value
         openChairCrate(shared.chairCrate)
-	end
-)
+	end,
+})
 
-AutoFarm:Cheat(
-	"Checkbox",
-	"AutoFarm",
-	function(State)
-		shared.autoFarmEnabled = State
+local Toggle = AutoFarm:CreateToggle({
+	Name = "AutoFarm",
+	CurrentValue = false,
+	Flag = "autoFarmToggle",
+	Callback = function(Value)
+		shared.autoFarmEnabled = Value
         autoFarm()
-	end
-)
+	end,
+})
 
-AutoFarm:Cheat("Label", "This will teleport you if you aren't in right server.")
-
-Discord:Cheat(
-	"Button",
-	"Copy Discord Invite",
-	function()
-		setclipboard("https://discord.gg/HjdtekKvDs")
-	end
-)
+local Label = AutoFarm:CreateLabel("This will teleport you if you aren't in right server.")
 
 function openGunCrate(crate)
     spawn(function()
