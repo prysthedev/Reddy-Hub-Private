@@ -1,12 +1,17 @@
 getgenv().fence = {
-    enabled = true,
-    legit = false,
-    rage = true,
-    lastAttack = 0,
-    autoCollectLoot = false,
-    stop = false,
-    minLevel = 10,
-    maxLevel = 20,
+    Toggles = {
+        enabled = true,
+        legit = false,
+        rage = true,
+        autoCollectLoot = false,
+        stop = false,
+    },
+    Settings = {
+        lastAttack = 0,
+        minLevel = 10,
+        maxLevel = 20,
+        attackSpeed = 0.14,
+    },
 }
 
 local Players = game:GetService("Players")
@@ -39,7 +44,7 @@ end
 function GetEnemys()
     local Enemys = {}
     for _, Enemy in next, workspace.NPCs:GetChildren() do
-        if Enemy:FindFirstChild("HumanoidRootPart") and GetNumberInString(Enemy.Name) >= fence.minLevel and GetNumberInString(Enemy.Name) <= fence.maxLevel then
+        if Enemy:FindFirstChild("HumanoidRootPart") and GetNumberInString(Enemy.Name) >= fence.Settings.minLevel and GetNumberInString(Enemy.Name) <= fence.Settings.maxLevel then
             table.insert(Enemys, Enemy)
         end
     end
@@ -68,17 +73,16 @@ function TeleportToEnemy(Enemy)
 end
 
 function Attack()
-    local tick = tick()
-    if tick - (fence.lastAttack or 0) >= 0.14 then
-        fence.lastAttack = tick
-        mouse1click(0, 0)
+    if tick() - (fence.Settings.lastAttack or 0) >= 0.14 then
+        fence.Settings.lastAttack = tick()
+        mouse1click()
     end
 end
 
 task.spawn(function()
     while fence.enabled do task.wait()
         local Loot = GetLoot()
-        if #Loot ~= 0 and fence.autoCollectLoot then
+        if #Loot ~= 0 and fence.Toggles.autoCollectLoot then
             fence.stop = true
             for i = 1, #Loot do
                 local LootPart = Loot[i]
@@ -91,13 +95,13 @@ task.spawn(function()
             fence.stop = false
         end
 
-        if fence.rage and fence.stop == false then
+        if fence.Toggles.rage and fence.Toggles.stop == false then
             local Enemy = GetClosestEnemy()
             if Enemy then
                 TeleportToEnemy(Enemy)
                 Attack()
             end
-        elseif fence.legit and fence.stop == false then
+        elseif fence.Toggles.legit and fence.Toggles.stop == false then
             local Enemy = GetClosestEnemy()
             if Enemy then
                 local Distance = (RootPart.Position - Enemy.HumanoidRootPart.Position).Magnitude
